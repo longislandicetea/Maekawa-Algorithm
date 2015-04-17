@@ -1,4 +1,4 @@
-from node import *
+from node import Node
 
 import config
 
