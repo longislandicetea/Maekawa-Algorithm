@@ -1,0 +1,96 @@
+Pi: 
+
+State //WANT,HELD,RELEASED
+VotedRequest //The latest request which have been voted but not in CS
+HasVoted
+HasInquired
+VotingSet //A hashtable (key=node_id, value=msg or none) marking the type of response the node has received (GRANT/FAIL/None)
+RequestQueue //A priority queue caching ungranted requests
+Timer
+ReceiveFail ??
+
+Init:
+State = RELEASED
+VotedRequest = None
+HasVoted = False
+HasInquired = False
+reset VotingSet
+RequestQueue.clear()
+Timer = 0
+ReceiveFail = False
+
+
+EnterCS:
+	State = WANT
+	++Timer
+	Multicast(REQUEST, VotingSet)
+	Wait until all VotingSet is GRANT
+	++Timer
+	State = HELD
+
+ExitCS:
+	++Timer
+	State = RELEASED
+	reset votingset
+	Multicast(RELEASE, VotingSet)
+
+OnRequest(REQUEST):
+	Timer = max(Timer + 1, Request.ts)
+	if State = HELD: //At this time , Voted must be True
+		RequestQueue.add(REQUEST.ts, REQUEST)
+	else:
+		if HasVoted = True:
+			RequestQueue.add(REQUEST.ts, REQUEST) 
+			if REQUEST.ts < VotedRequest.ts and HasInquired = False:
+				send(INQUIRE, VotedRequest.src)
+				HasInquired = True
+			else:
+				send(FAIL, REQUEST.src)
+		else:
+			send(GRANT, REQUEST.src)
+			HasVoted = True
+			VotedRequest = REQUEST
+
+OnRelease(RELEASE): 
+	Timer = max(Timer + 1, Request.ts)
+	ProcessNextRequest()
+
+ProcessNextRequest():
+	HasInquired = False
+	if RequestQueue is not empty:
+		CurrRequest = RequestQueue.pop() //get the cached request with smallest timestamp
+		send(GRANT, CurrRequest.src)
+		HasVoted = True
+		VotedRequest = TopRequest
+	else:
+		HasVoted = False
+		VotedRequest = None
+
+OnGrant(GRANT)
+	Timer = max(Timer + 1, Request.ts)
+	VotingSet[GRANT.src] = GRANT
+
+OnFail(FAIL):
+	Timer = max(Timer + 1, Request.ts)
+	ReceiveFail = True
+
+OnInquire(INQUIRE): //INQUIRE是刚刚发过GRANT的，(INQUIRE.src.VotedRequest).src = i
+	Timer = max(Timer + 1, Request.ts)
+	If RecieveFail or do not receive a new GRANT for a YIELD: //这个条件可否简化为state != Held?
+		VotingSet[INQUIRE.src] = None
+		send(YIELD, INQUIRE.src) 
+
+OnYield(YIELD):
+	Timer = max(Timer + 1, Request.ts)
+	RequestQueue.add(VotedReqeust.ts, VotedRequest)
+	ProcessNextRequest()
+
+
+//Problems
+OnInquire中revoke的condition怎么理解？ my_ts == inquire_ts 是什么鬼@@
+
+//TODO:
+Python的PriorityQueue怎么work
+json custom decoder
+
+用assertion来保证cs只有一个process占用？
