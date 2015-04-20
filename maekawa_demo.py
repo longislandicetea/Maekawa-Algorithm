@@ -9,10 +9,7 @@ def main():
 	#create nodes
 	for i in xrange(n):
 		nodes.append(Node(i))
-
-	#enable communication between nodes
-	for i in xrange(n):
-		nodes[i].BuildConnection(n)
+	print "{num_node} nodes created!".format(num_node=config.NUM_NODE)
 
 	for i in xrange(n):
 		nodes[i].Run()
