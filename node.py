@@ -4,7 +4,6 @@ import socket
 import select
 import time
 from threading import Thread
-import yaml
 
 import config
 from enum_type import STATE
@@ -33,9 +32,13 @@ class Node(object):
 		self._clientSockets = [Node._createClientSocket() for i in xrange(config.NUM_NODE)]
 
 		#init voting set
+		self._timer = 0
 		self._votingSet = self._createVotingSet()
-		print self._votingSet
-		print "Init node {node_id}!".format(node_id=self.NodeID)
+		self._votedRequest = None
+		self._hasVoted = False
+		self._hasInquired = False
+		self._receiveFail = False
+		print "Init node {node_id} completed!".format(node_id=self.NodeID)
 
 	"""socket related"""
 	"""
@@ -68,9 +71,12 @@ class Node(object):
 		mat_k = int(ceil(sqrt(config.NUM_NODE)))
 		row_id, col_id = int(self.NodeID / mat_k), int(self.NodeID % mat_k)
 		for i in xrange(mat_k):
-			voting_set[mat_k * row_id + i] = False
-			voting_set[col_id + mat_k * i] = False
+			voting_set[mat_k * row_id + i] = None
+			voting_set[col_id + mat_k * i] = None
 		return voting_set
+
+	def _resetVotingSet(self):
+		pass
 
 	def Run(self):
 		self._clientThread = Thread(target=self._runClient)
@@ -93,20 +99,20 @@ class Node(object):
 			time.sleep(0.1)
 
 	def _processMessage(self, msg):
-		decoded_msg = yaml.load(msg)
-		print "I am {dest}. I receive {data} from {src}!".format(dest=decoded_msg['dest'],data=decoded_msg['data'],src=decoded_msg['src'])
-		msg_type = decoded_msg['msg_type']
-		if msg_type == "MSG_TYPE.REQUEST":
+		decoded_msg = Message.ToMessage(msg)
+		print "I am {dest}. I receive {data} from {src}!".format(dest=decoded_msg.dest,data=decoded_msg.data,src=decoded_msg.src)
+		msg_type = decoded_msg.msg_type
+		if msg_type == MSG_TYPE.REQUEST:
 			pass
-		elif msg_type == "MSG_TYPE.GRANT":
+		elif msg_type == MSG_TYPE.GRANT:
 			pass
-		elif msg_type == "MSG_TYPE.RELEASE":
+		elif msg_type == MSG_TYPE.RELEASE:
 			pass
-		elif msg_type == "MSG_TYPE.FAIL":
+		elif msg_type == MSG_TYPE.FAIL:
 			pass
-		elif msg_type == "MSG_TYPE.INQUIRE":
+		elif msg_type == MSG_TYPE.INQUIRE:
 			pass
-		elif msg_type == "MSG_TYPE.YIELD":
+		elif msg_type == MSG_TYPE.YIELD:
 			pass
 		else:
 			pass
@@ -115,6 +121,7 @@ class Node(object):
 		for i in xrange(config.NUM_NODE):
 			if i != self.NodeID:
 				msg = Message(msg_type=MSG_TYPE.REQUEST, src=self.NodeID, dest=i, data="lalala").ToJSON()
+				print "sent msg!"
 				self._clientSockets[i].send(msg)			
 
 	def _run_check(self):

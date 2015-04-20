@@ -40,3 +40,7 @@ class Message(object):
 
 	def ToJSON(self):
 		return json.dumps(self, cls=MessageEncoder)
+
+	@staticmethod
+	def ToMessage(json_str):
+		return json.loads(json_str, cls=MessageDecoder)
