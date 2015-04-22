@@ -6,22 +6,20 @@ HasVoted
 HasInquired
 VotingSet //A hashtable (key=node_id, value=msg or none) marking the type of response the node has received (GRANT/FAIL/None)
 RequestQueue //A priority queue caching ungranted requests
-Timer
-ReceiveFail ??
+NumVotesReceived
 
 Init:
 State = RELEASED
 VotedRequest = None
 HasVoted = False
+NumVotesReceived = 0
 HasInquired = False
-reset VotingSet
+VotingSet.reset()
 RequestQueue.clear()
-Timer = 0
-ReceiveFail = False
 
 
 EnterCS:
-	State = WANT
+	State = REQUEST
 	++Timer
 	Multicast(REQUEST, VotingSet)
 	Wait until all VotingSet is GRANT
@@ -57,6 +55,8 @@ OnRelease(RELEASE):
 
 ProcessNextRequest():
 	HasInquired = False
+	NumVotesReceived = 0
+	VotingSet.reset()
 	if RequestQueue is not empty:
 		CurrRequest = RequestQueue.pop() //get the cached request with smallest timestamp
 		send(GRANT, CurrRequest.src)
@@ -88,9 +88,5 @@ OnYield(YIELD):
 
 //Problems
 OnInquire中revoke的condition怎么理解？ my_ts == inquire_ts 是什么鬼@@
-
-//TODO:
-Python的PriorityQueue怎么work
-json custom decoder
 
 用assertion来保证cs只有一个process占用？
