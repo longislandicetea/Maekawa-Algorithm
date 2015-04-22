@@ -69,10 +69,11 @@ ProcessNextRequest():
 OnGrant(GRANT)
 	Timer = max(Timer + 1, Request.ts)
 	VotingSet[GRANT.src] = GRANT
+	++NumVotesReceived
 
 OnFail(FAIL):
 	Timer = max(Timer + 1, Request.ts)
-	ReceiveFail = True
+	VotingSet[FAIL.src] = FAIL
 
 OnInquire(INQUIRE): //INQUIRE是刚刚发过GRANT的，(INQUIRE.src.VotedRequest).src = i
 	Timer = max(Timer + 1, Request.ts)
