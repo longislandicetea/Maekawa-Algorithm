@@ -15,5 +15,21 @@ class MSG_TYPE(IntEnum):
 	YIELD = 5
 
 	def __json__(self):
-		return int(self)
+		return self
+
+	def ToStr(self):
+		if self == 0:
+			return "REQUEST"
+		elif self == 1:
+			return "GRANT"
+		elif self == 2:
+			return "RELEASE"
+		elif self == 3:
+			return "FAIL"
+		elif self == 4:
+			return "INQUIRE"
+		elif self == 5:
+			return "YIELD"
+		else:
+			return None
 		
