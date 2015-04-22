@@ -145,7 +145,7 @@ class ClientThread(Thread):
 		self._clientSockets = [utils.CreateClientSocket() for i in xrange(config.NUM_NODE)]
 
 	def run(self):
-		if self._node.NodeID in [0,1]:
+		if self._node.NodeID == 0:
 			self._update()
 		else:
 			pass
