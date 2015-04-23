@@ -4,6 +4,8 @@ import time
 from node import Node
 import config
 
+import stacktracer
+
 TOT_EXEC_TIME = 100
 
 def main():
@@ -24,8 +26,10 @@ def main():
 		nodes[i].Run()
 
 if __name__ == '__main__':
+	'''stacktracer.trace_start("trace.html",interval=5,auto=True)
 	timer_thread = Thread(target=main)
 	timer_thread.daemon = True
 	timer_thread.start()
 	time.sleep(TOT_EXEC_TIME + 1)
-	#main()
+	stacktracer.trace_stop()'''
+	main()

@@ -2,6 +2,7 @@ from datetime import datetime
 import heapq
 from math import sqrt
 from math import ceil
+import re
 import select
 import sys
 import time
@@ -26,14 +27,14 @@ class ServerThread(Thread):
 	def __init__(self, node):
 		Thread.__init__(self)
 		self._node = node
-		self._connectionList = []
-		self._serverSocket = utils.CreateServerSocket(config.NODE_PORT[self._node.NodeID])
-		self._connectionList.append(self._serverSocket)
 
 	def run(self):
 		self._update()
 
 	def _update(self):
+		self._connectionList = []
+		self._serverSocket = utils.CreateServerSocket(config.NODE_PORT[self._node.NodeID])
+		self._connectionList.append(self._serverSocket)
 		while True:
 			read_sockets,write_sockets,error_sockets = select.select(self._connectionList,[],[])
 			for read_socket in read_sockets:
@@ -42,21 +43,18 @@ class ServerThread(Thread):
 					self._connectionList.append(conn)
 				else:
 					try:
-						msg = read_socket.recv(RECV_BUFFER)
-						self._processMessage(Message.ToMessage(msg))
+						msg_stream = read_socket.recv(RECV_BUFFER)
+						msgs = re.findall(r'\{(.*?)\}', msg_stream)
+						for msg in msgs:
+							#sys.stdout.write("{i}: receiving {msg} size {s}\n".format(i=self._node.NodeID, msg=msg, s=sys.getsizeof(msg)))
+							self._processMessage(Message.ToMessage("{{{msg_body}}}".format(msg_body=msg)))
 					except:
-						self._connectionList.remove(read_socket)
 						read_socket.close()
+						self._connectionList.remove(read_socket)
 						continue
 		self._serverSocket.close()
 
 	def _processMessage(self, msg):
-		'''sys.stdout.write("{time} {node_id} {sender} {msg_type}\n".format(
-			time=datetime.now().time().strftime("%H:%M:%S:%f"),
-			node_id=self._node.NodeID,
-			sender=msg.src,
-			msg_type=msg.msg_type.ToStr(),
-			))'''
 		self._node.LamportTS = max(self._node.LamportTS + 1, msg.ts)
 		if msg.msg_type == MSG_TYPE.REQUEST:
 			self._onRequest(msg)
@@ -71,16 +69,27 @@ class ServerThread(Thread):
 		elif msg.msg_type == MSG_TYPE.YIELD:
 			self._onYield(msg)
 		else:
-			pass
+			sys.stdout.write("here???\n")
 
 	def _onRequest(self, request_msg):
+		#sys.stdout.write("{i} src={src} ts={ts}\n".format(i=self._node.NodeID, src=request_msg.src, ts=request_msg.ts))
+		'''sys.stdout.write("{i}: receive request from {sender}. my state: {state}. has voted {voted}\n".format(
+			i=self._node.NodeID,
+			sender=request_msg.src,
+			state=self._node.State,
+			voted=self._node.HasVoted))'''
 		if self._node.State == STATE.HELD:
+			#sys.stdout.write("{x}: 1\n".format(x=self._node.NodeID))
 			heapq.heappush(self._node.RequestQueue,
 				(request_msg.ts, request_msg))
+			#sys.stdout.write("{x}: receive request from {sender} but I was on held!\n".format(x=self._node.NodeID, sender=request_msg.src))
 		else:
+			#sys.stdout.write("{x}: 2\n".format(x=self._node.NodeID))
 			if self._node.HasVoted:
+				#sys.stdout.write("{x}: receive request from {sender} but I have voted {she}\n".format(x=self._node.NodeID, sender=request_msg.src, she=self._node.VotedRequest.src))
 				heapq.heappush(self._node.RequestQueue,
 					(request_msg.ts, request_msg))
+				#sys.stdout.write("{i}: {num_req} received\n".format(i=self._node.NodeID, num_req=len(self._node.RequestQueue)))
 				response_msg = Message(src=self._node.NodeID, ts=self._node.LamportTS)
 				if request_msg.ts < self._node.VotedRequest.ts and not self._node.HasInquired:
 					response_msg.SetType(MSG_TYPE.INQUIRE)
@@ -90,12 +99,14 @@ class ServerThread(Thread):
 					response_msg.SetDest(request_msg.src)
 				self._node.Client.SendMessage(response_msg, response_msg.dest)
 			else:
+				#sys.stdout.write("{x}: 3\n".format(x=self._node.NodeID))
 				self._grantRequest(request_msg)
 
 	def _onRelease(self, release_msg=None):
+		#sys.stdout.write("{i} receives release from {r}\n".format(i=self._node.NodeID, r=release_msg.src))
 		self._node.HasInquired = False
 		if self._node.RequestQueue:
-			next_request = heapq.heappop(RequestQueue)
+			next_request = heapq.heappop(self._node.RequestQueue)[1]
 			self._grantRequest(next_request)
 		else:
 			self._node.HasVoted = False
@@ -115,7 +126,6 @@ class ServerThread(Thread):
 	def _onGrant(self, grant_msg):
 		self._node.VotingSet[grant_msg.src] = grant_msg
 		self._node.NumVotesReceived += 1
-		#sys.stdout.write("votes: {votes}\n".format(votes=self._node.NumVotesReceived))
 
 	def _onFail(self, fail_msg):
 		self._node.VotingSet[fail_msg.src] = fail_msg
@@ -145,7 +155,7 @@ class ClientThread(Thread):
 		self._clientSockets = [utils.CreateClientSocket() for i in xrange(config.NUM_NODE)]
 
 	def run(self):
-		if self._node.NodeID == 0:
+		if self._node.NodeID in [0,1]:
 			self._update()
 		else:
 			pass
@@ -164,12 +174,13 @@ class ClientThread(Thread):
 			cnt += 1
 
 	def SendMessage(self, msg, dest):
-		sys.stdout.write("{src}: sending {msg} to {dest}\n".format(
+		'''sys.stdout.write("{src}: sending {msg} to {dest}\n".format(
 			src=self._node.NodeID,
 			msg=msg.msg_type.ToStr(), 
 			dest=dest,
-			))
-		self._clientSockets[dest].send(msg.ToJSON())
+			))'''
+		#sys.stdout.write("{i}: sending {msg}\n".format(i=self._node.NodeID, msg=msg.ToJSON()))
+		self._clientSockets[dest].sendall(msg.ToJSON())
 
 	def Multicast(self, msg, group):
 		for dest in group:
@@ -246,6 +257,7 @@ class Node(object):
 		for i in xrange(mat_k):
 			voting_set[mat_k * row_id + i] = None
 			voting_set[col_id + mat_k * i] = None
+		sys.stdout.write("{i}: voting set {len}\n".format(i=self.NodeID, len=len(voting_set)))
 		return voting_set
 
 	def _resetVotingSet(self):
