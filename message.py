@@ -42,6 +42,12 @@ class Message(object):
 			data=self.data,
 			)
 
+	def __cmp__(self, other):
+		if self.ts != other .ts:
+			return cmp(self.ts, other.ts)
+		else:
+			return cmp(self.src, other.src)
+
 	def SetType(self, msg_type):
 		self.msg_type = msg_type
 
