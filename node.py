@@ -18,9 +18,9 @@ import utils
 global CS_INT, NEXT_REQ, TOT_EXEC_TIME, OPTION
 
 RECV_BUFFER = 4096
-CS_INT = 3
+CS_INT = 2
 NEXT_REQ = 4
-TOT_EXEC_TIME = 20
+TOT_EXEC_TIME = 100
 OPTION = 1
 
 class ServerThread(Thread):
@@ -155,10 +155,11 @@ class ClientThread(Thread):
 		self._clientSockets = [utils.CreateClientSocket() for i in xrange(config.NUM_NODE)]
 
 	def run(self):
-		if self._node.NodeID in [0,1]:
+		self._update()
+		'''if self._node.NodeID in [0,1]:
 			self._update()
 		else:
-			pass
+			pass'''
 
 	def _update(self):
 		cnt = 0
@@ -190,10 +191,6 @@ class ClientThread(Thread):
 	def BuildConnection(self, num_node):
 		for i in xrange(num_node):
 			self._clientSockets[i].connect(('localhost', config.NODE_PORT[i]))
-			print "{src} connects with {dest}!".format(
-				src=self._node.NodeID, 
-				dest=i,
-				)
 
 
 class CheckerThread(Thread):
@@ -207,12 +204,12 @@ class CheckerThread(Thread):
 	def _update(self):
 		global CS_INT, NEXT_REQ
 		while True:
-			curr_time = time.time()
-			if self._node.State == STATE.RELEASE and utils.TimeElapsed(self._node.TimeExitCS, curr_time, 1) >= NEXT_REQ:
+			curr_time = datetime.now()
+			if self._node.State == STATE.RELEASE and utils.TimeElapsed(self._node.TimeExitCS, curr_time,1) >= NEXT_REQ:
 				self._node.SignalRequestCS.set()
 			if self._node.State == STATE.REQUEST and self._node.NumVotesReceived == len(self._node.VotingSet):
 				self._node.SignalEnterCS.set()
-			if self._node.State == STATE.HELD and utils.TimeElapsed(self._node.TimeEnterCS, curr_time, 1) >= CS_INT:
+			if self._node.State == STATE.HELD and utils.TimeElapsed(self._node.TimeEnterCS, curr_time,1) >= CS_INT:
 				self._node.SignalExitCS.set()
 
 
@@ -248,7 +245,7 @@ class Node(object):
 		self.TimeEnterCS = 0
 		self.TimeExitCS = 0
 
-		print "Init node {node_id} completed!".format(node_id=self.NodeID)
+		#print "Init node {node_id} completed!".format(node_id=self.NodeID)
 
 	def _createVotingSet(self):
 		voting_set = dict()
@@ -257,7 +254,6 @@ class Node(object):
 		for i in xrange(mat_k):
 			voting_set[mat_k * row_id + i] = None
 			voting_set[col_id + mat_k * i] = None
-		sys.stdout.write("{i}: voting set {len}\n".format(i=self.NodeID, len=len(voting_set)))
 		return voting_set
 
 	def _resetVotingSet(self):
@@ -265,11 +261,12 @@ class Node(object):
 			self.VotingSet[voter] = None
 
 	def RequestCS(self):
+		request_time = datetime.now()
 		self.State = STATE.REQUEST
 		self.LamportTS += 1
 		sys.stdout.write("{src}: request CS at {t}\n".format(
 			src=self.NodeID, 
-			t=datetime.now().time(),
+			t=utils.DatetimeToStr(request_time),
 			))
 		request_msg = Message(
 			msg_type=MSG_TYPE.REQUEST,
@@ -280,24 +277,28 @@ class Node(object):
 		self.SignalRequestCS.clear()
 
 	def EnterCS(self):
+		self.TimeEnterCS = datetime.now() 
 		self.State = STATE.HELD
 		self.LamportTS += 1
-		self.TimeEnterCS = time.time() 
 		sys.stdout.write("{src}: enter CS at {t}\n".format(
 			src=self.NodeID, 
-			t=datetime.now().time(),
+			t=utils.DatetimeToStr(self.TimeEnterCS),
 			))
+		'''sys.stdout.write("{time} {node_id}, {node_list}\n".format(
+			time=datetime.now().time(),
+			node_id=self.NodeID,
+			node_list=self.VotingSet.keys()))'''
 		self.SignalEnterCS.clear()
 
 	def ExitCS(self):
+		self.TimeExitCS = datetime.now()
 		self.State = STATE.RELEASE
 		self.LamportTS += 1
 		self.NumVotesReceived = 0
 		self._resetVotingSet()
-		self.TimeExitCS = time.time()
 		sys.stdout.write("{src}: exit CS at {t}\n".format(
 			src=self.NodeID,
-			t=datetime.now().time(),
+			t=utils.DatetimeToStr(self.TimeExitCS),
 			))
 		release_msg = Message(
 			msg_type=MSG_TYPE.RELEASE,
