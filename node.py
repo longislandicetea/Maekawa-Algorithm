@@ -20,8 +20,8 @@ import utils
 global CS_INT, NEXT_REQ, TOT_EXEC_TIME, OPTION
 
 RECV_BUFFER = 4096
-CS_INT = 2
-NEXT_REQ = 5
+CS_INT = 10
+NEXT_REQ = 20
 TOT_EXEC_TIME = 20
 OPTION = 1
 
@@ -76,11 +76,6 @@ class ServerThread(Thread):
 			self._onYield(msg)
 
 	def _onRequest(self, request_msg):
-		'''sys.stdout.write("{i}: receive request from {sender}. my state: {state}. has voted {voted}\n".format(
-			i=self._node.NodeID,
-			sender=request_msg.src,
-			state=self._node.State,
-			voted=self._node.HasVoted))'''
 		if self._node.State == STATE.HELD:
 			heapq.heappush(self._node.RequestQueue, request_msg)
 		else:
@@ -98,7 +93,6 @@ class ServerThread(Thread):
 				self._grantRequest(request_msg)
 
 	def _onRelease(self, release_msg=None):
-		#sys.stdout.write("{i} receives release from {r}\n".format(i=self._node.NodeID, r=release_msg.src))
 		self._node.HasInquired = False
 		if self._node.RequestQueue:
 			next_request = heapq.heappop(self._node.RequestQueue)
@@ -154,13 +148,11 @@ class ClientThread(Thread):
 	def _update(self):
 		self._node.TrueTimeReuqestCS = datetime.datetime.now()
 		while True:
-			#curr_time = datetime.datetime.now()
 			self._node.SignalRequestCS.wait()
 			self._node.RequestCS(datetime.datetime.now())
 			self._node.SignalEnterCS.wait()
 			self._node.EnterCS(datetime.datetime.now())
 			self._node.SignalExitCS.wait()
-			#sys.stdout.write("{i}: client: {t}\n".format(i=self._node.NodeID, t=utils.DatetimeToStr(datetime.datetime.now())))
 			self._node.ExitCS(datetime.datetime.now())
 
 	def SendMessage(self, msg, dest, multicast=False):
@@ -169,22 +161,14 @@ class ClientThread(Thread):
 			msg=msg.msg_type.ToStr(), 
 			dest=dest,
 			))'''
-		#sys.stdout.write("{i}: sending {msg}\n".format(i=self._node.NodeID, msg=msg.ToJSON()))
-		#assert msg.dest == dest
 		if not multicast:
 			self._node.LamportTS += 1
 			msg.SetTS(self._node.LamportTS)
 		self._clientSockets[dest].sendall(msg.ToJSON())
-		'''sys.stdout.write("{i}: adding {msg} to queue {qid}!\n".format(
-			i=self._node.NodeID,
-			msg=msg.ToJSON(),
-			qid=dest,
-			))'''
-		#assert dest == msg.dest
+		assert dest == msg.dest
 		#self._node.MessageBuffer[dest].append([msg, datetime.datetime.now() + datetime.timedelta(0, config.DELAY[self._node.NodeID][dest])])
 
 	def Multicast(self, msg, group):
-		#sys.stdout.write("multicast: {group}\n".format(group=group))
 		self._node.LamportTS += 1
 		msg.SetTS(self._node.LamportTS)
 		for dest in group:
@@ -197,33 +181,6 @@ class ClientThread(Thread):
 	def BuildConnection(self, num_node):
 		for i in xrange(num_node):
 			self._clientSockets[i].connect(('localhost', config.NODE_PORT[i]))
-
-
-class CheckerThread(Thread):
-	def __init__(self, node):
-		Thread.__init__(self)
-		self._node = node
-
-	def run(self):
-		self._update()
-	
-	def _update(self):
-		while True:
-			curr_time = datetime.datetime.now()
-			if self._node.State == STATE.RELEASE and self._node.TimeRequestCS <= curr_time:
-				if not self._node.SignalRequestCS.is_set():
-					#self._node.TrueTimeReuqestCS = curr_time
-					self._node.SignalRequestCS.set()
-			elif self._node.State == STATE.REQUEST and self._node.NumVotesReceived == len(self._node.VotingSet):
-				if not self._node.SignalEnterCS.is_set():
-					#self._node.TrueTimeEnterCS = curr_time
-					self._node.SignalEnterCS.set()
-			elif self._node.State == STATE.HELD and self._node.TimeExitCS <= curr_time:
-				if not self._node.SignalExitCS.is_set():
-					#self._node.TrueTimeExitCS = curr_time
-					self._node.SignalExitCS.set()
-					#sys.stdout.write("{i}: checker: {t}\n".format(i=self._node.NodeID, t=utils.DatetimeToStr(curr_time)))
-			time.sleep(0.001)
 
 
 '''This thread simulates commnucation channel delay, 
@@ -272,8 +229,7 @@ class Node(object):
 		self.Server = ServerThread(self)
 		self.Server.start()
 		self.Client = ClientThread(self)
-		self.Checker = CheckerThread(self)
-		self.Delay = DelayThread(self)
+		#self.Delay = DelayThread(self)
 
 		#Event signals
 		self.SignalRequestCS = threading.Event()
@@ -285,10 +241,6 @@ class Node(object):
 		self.TimeRequestCS = None
 		self.TimeExitCS = None
 
-		#self.TrueTimeRequestCS = None
-		#self.TrueTimeEnterCS = None
-		#self.TrueTimeExitCS = None
-
 	def _createVotingSet(self):
 		voting_set = dict()
 		mat_k = int(ceil(sqrt(config.NUM_NODE)))
@@ -297,14 +249,6 @@ class Node(object):
 			voting_set[mat_k * row_id + i] = None
 			voting_set[col_id + mat_k * i] = None
 		return voting_set
-		'''if self.NodeID == 0:
-			return {0:None, 1:None, 2:None}
-		elif self.NodeID == 1:
-			return {0:None, 1:None, 2:None}
-		elif self.NodeID == 2:
-			return {0:None, 3:None, 2:None}
-		elif self.NodeID == 3:
-			return {1:None, 3:None, 2:None}'''
 
 	def _resetVotingSet(self):
 		for voter in self.VotingSet:
@@ -326,7 +270,7 @@ class Node(object):
 		self.SignalRequestCS.clear()
 
 	def EnterCS(self, ts):
-		self.TimeExitCS = ts + datetime.timedelta(seconds=CS_INT)
+		self.TimeExitCS = ts + datetime.timedelta(milliseconds=CS_INT)
 		self.State = STATE.HELD
 		self.LamportTS += 1
 		sys.stdout.write("{src}: enter CS at {t}\n".format(
@@ -340,7 +284,7 @@ class Node(object):
 		self.SignalEnterCS.clear()
 
 	def ExitCS(self, ts):
-		self.TimeRequestCS = ts + datetime.timedelta(seconds=NEXT_REQ)
+		self.TimeRequestCS = ts + datetime.timedelta(milliseconds=NEXT_REQ)
 		self.State = STATE.RELEASE
 		self.LamportTS += 1
 		self.NumVotesReceived = 0
@@ -365,21 +309,16 @@ class Node(object):
 		curr_time = datetime.datetime.now()
 		if self.State == STATE.RELEASE and self.TimeRequestCS <= curr_time:
 			if not self.SignalRequestCS.is_set():
-				#self._node.TrueTimeReuqestCS = curr_time
 				self.SignalRequestCS.set()
 		elif self.State == STATE.REQUEST and self.NumVotesReceived == len(self.VotingSet):
 			if not self.SignalEnterCS.is_set():
-				#self._node.TrueTimeEnterCS = curr_time
 				self.SignalEnterCS.set()
 		elif self.State == STATE.HELD and self.TimeExitCS <= curr_time:
 			if not self.SignalExitCS.is_set():
-				#self._node.TrueTimeExitCS = curr_time
 				self.SignalExitCS.set()
-			#sys.stdout.write("")
 
 	def Run(self):
 		self.Client.start()
 		self._check()
-		#self.Checker.start()
 		#self.Delay.start()
 			
