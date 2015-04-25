@@ -1,0 +1,87 @@
+4 nodes set up complete.
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 2, "msg_type": 0 at 23:16:36:857
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 2, "msg_type": 0 at 23:16:36:980
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 2, "msg_type": 0 at 23:16:36:980
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 5, "msg_type": 0 at 23:16:37:27
+3: receiving "dest": 3, "src": 1, "data": null, "ts": 5, "msg_type": 0 at 23:16:37:277
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 4, "msg_type": 1 at 23:16:37:295
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 3, "msg_type": 1 at 23:16:37:690
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 5, "msg_type": 0 at 23:16:37:698
+2: receiving "dest": 2, "src": 2, "data": null, "ts": 5, "msg_type": 0 at 23:16:37:751
+2: receiving "dest": 2, "src": 2, "data": null, "ts": 7, "msg_type": 3 at 23:16:38:39
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 7, "msg_type": 3 at 23:16:38:39
+3: receiving "dest": 3, "src": 2, "data": null, "ts": 5, "msg_type": 0 at 23:16:38:39
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 8, "msg_type": 3 at 23:16:38:223
+2: receiving "dest": 2, "src": 3, "data": null, "ts": 10, "msg_type": 3 at 23:16:38:226
+1: receiving "dest": 1, "src": 3, "data": null, "ts": 6, "msg_type": 1 at 23:16:38:226
+1: receiving "dest": 1, "src": 3, "data": null, "ts": 8, "msg_type": 0 at 23:16:38:373
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 3, "msg_type": 1 at 23:16:38:613
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 5, "msg_type": 0 at 23:16:38:731
+0: enter CS at 23:16:38:773
+2: receiving "dest": 2, "src": 3, "data": null, "ts": 10, "msg_type": 0 at 23:16:38:817
+3: receiving "dest": 3, "src": 3, "data": null, "ts": 10, "msg_type": 0 at 23:16:38:940
+3: receiving "dest": 3, "src": 1, "data": null, "ts": 12, "msg_type": 3 at 23:16:39:62
+3: receiving "dest": 3, "src": 2, "data": null, "ts": 12, "msg_type": 3 at 23:16:40:126
+3: receiving "dest": 3, "src": 3, "data": null, "ts": 12, "msg_type": 3 at 23:16:40:310
+0: exite CS at 23:16:42:265
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 13, "msg_type": 2 at 23:16:43:72
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 13, "msg_type": 2 at 23:16:43:72
+2: receiving "dest": 2, "src": 2, "data": null, "ts": 14, "msg_type": 1 at 23:16:43:167
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 13, "msg_type": 2 at 23:16:43:348
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 15, "msg_type": 1 at 23:16:44:103
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 14, "msg_type": 1 at 23:16:45:136
+1: enter CS at 23:16:45:443
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 17, "msg_type": 0 at 23:16:47:466
+1: exite CS at 23:16:47:525
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 19, "msg_type": 0 at 23:16:47:741
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 17, "msg_type": 0 at 23:16:47:741
+0: enter CS at 23:16:47:883
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 19, "msg_type": 3 at 23:16:47:883
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 19, "msg_type": 2 at 23:16:47:884
+3: receiving "dest": 3, "src": 1, "data": null, "ts": 19, "msg_type": 2 at 23:16:47:967
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 19, "msg_type": 2 at 23:16:48:167
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 23, "msg_type": 1 at 23:16:48:374
+2: receiving "dest": 2, "src": 3, "data": null, "ts": 20, "msg_type": 1 at 23:16:48:448
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 21, "msg_type": 3 at 23:16:50:94
+3: receiving "dest": 3, "src": 1, "data": null, "ts": 23, "msg_type": 1 at 23:16:50:95
+2: enter CS at 23:16:50:316
+0: exite CS at 23:16:50:695
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 20, "msg_type": 3 at 23:16:50:708
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 26, "msg_type": 2 at 23:16:51:842
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 27, "msg_type": 2 at 23:16:52:75
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 29, "msg_type": 2 at 23:16:52:116
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 29, "msg_type": 1 at 23:16:52:240
+3: receiving "dest": 3, "src": 2, "data": null, "ts": 30, "msg_type": 1 at 23:16:52:561
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 28, "msg_type": 1 at 23:16:53:331
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 30, "msg_type": 0 at 23:16:54:31
+2: exite CS at 23:16:54:239
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 30, "msg_type": 0 at 23:16:54:239
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 32, "msg_type": 2 at 23:16:54:369
+3: receiving "dest": 3, "src": 1, "data": null, "ts": 30, "msg_type": 0 at 23:16:54:602
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 33, "msg_type": 3 at 23:16:54:602
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 32, "msg_type": 3 at 23:16:54:792
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 35, "msg_type": 1 at 23:16:55:542
+2: receiving "dest": 2, "src": 2, "data": null, "ts": 32, "msg_type": 2 at 23:16:55:566
+3: receiving "dest": 3, "src": 2, "data": null, "ts": 32, "msg_type": 2 at 23:16:56:148
+1: receiving "dest": 1, "src": 3, "data": null, "ts": 32, "msg_type": 3 at 23:16:56:195
+3: receiving "dest": 3, "src": 3, "data": null, "ts": 34, "msg_type": 1 at 23:16:56:292
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 37, "msg_type": 0 at 23:16:56:292
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 37, "msg_type": 0 at 23:16:57:343
+3: enter CS at 23:16:58:196
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 39, "msg_type": 3 at 23:16:58:224
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 37, "msg_type": 0 at 23:16:58:225
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 34, "msg_type": 1 at 23:16:59:233
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 38, "msg_type": 3 at 23:16:59:827
+0: enter CS at 23:16:59:884
+3: receiving "dest": 3, "src": 2, "data": null, "ts": 40, "msg_type": 0 at 23:16:59:988
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 38, "msg_type": 3 at 23:17:0:231
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 40, "msg_type": 0 at 23:17:0:282
+3: exite CS at 23:17:0:289
+2: receiving "dest": 2, "src": 2, "data": null, "ts": 40, "msg_type": 0 at 23:17:0:893
+0: exite CS at 23:17:2:381
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 47, "msg_type": 2 at 23:17:2:526
+1: receiving "dest": 1, "src": 3, "data": null, "ts": 42, "msg_type": 2 at 23:17:2:634
+3: receiving "dest": 3, "src": 3, "data": null, "ts": 42, "msg_type": 2 at 23:17:2:883
+2: receiving "dest": 2, "src": 3, "data": null, "ts": 42, "msg_type": 2 at 23:17:2:931
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 49, "msg_type": 1 at 23:17:3:132
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 47, "msg_type": 2 at 23:17:3:786

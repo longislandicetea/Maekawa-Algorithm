@@ -1,0 +1,145 @@
+9 nodes set up complete.
+0: reque CS at 10:4:26:539
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 2, "msg_type": 0 at 10:4:26:539
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 2, "msg_type": 0 at 10:4:26:540
+1: reque CS at 10:4:26:540
+3: receiving "dest": 3, "src": 0, "data": null, "ts": 4, "msg_type": 0 at 10:4:26:540
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 4, "msg_type": 0 at 10:4:26:541
+6: receiving "dest": 6, "src": 0, "data": null, "ts": 4, "msg_type": 0 at 10:4:26:541
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 4, "msg_type": 1 at 10:4:26:541
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 5, "msg_type": 0 at 10:4:26:541
+2: receiving "dest": 2, "src": 1, "data": null, "ts": 5, "msg_type": 0 at 10:4:26:542
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 3, "msg_type": 1 at 10:4:26:542
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 7, "msg_type": 3 at 10:4:26:542
+2: reque CS at 10:4:26:543
+7: receiving "dest": 7, "src": 1, "data": null, "ts": 5, "msg_type": 0 at 10:4:26:543
+1: receiving "dest": 1, "src": 2, "data": null, "ts": 7, "msg_type": 3 at 10:4:26:543
+4: receiving "dest": 4, "src": 1, "data": null, "ts": 5, "msg_type": 0 at 10:4:26:543
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 5, "msg_type": 0 at 10:4:26:543
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 5, "msg_type": 1 at 10:4:26:544
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 9, "msg_type": 0 at 10:4:26:544
+1: receiving "dest": 1, "src": 2, "data": null, "ts": 9, "msg_type": 0 at 10:4:26:544
+0: receiving "dest": 0, "src": 3, "data": null, "ts": 5, "msg_type": 1 at 10:4:26:544
+1: receiving "dest": 1, "src": 4, "data": null, "ts": 6, "msg_type": 1 at 10:4:26:545
+5: receiving "dest": 5, "src": 2, "data": null, "ts": 9, "msg_type": 0 at 10:4:26:545
+0: receiving "dest": 0, "src": 6, "data": null, "ts": 5, "msg_type": 1 at 10:4:26:545
+1: receiving "dest": 1, "src": 7, "data": null, "ts": 6, "msg_type": 1 at 10:4:26:545
+2: receiving "dest": 2, "src": 2, "data": null, "ts": 9, "msg_type": 0 at 10:4:26:544
+8: receiving "dest": 8, "src": 2, "data": null, "ts": 9, "msg_type": 0 at 10:4:26:545
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 8, "msg_type": 3 at 10:4:26:546
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 11, "msg_type": 3 at 10:4:26:546
+2: receiving "dest": 2, "src": 1, "data": null, "ts": 11, "msg_type": 3 at 10:4:26:546
+2: receiving "dest": 2, "src": 2, "data": null, "ts": 11, "msg_type": 3 at 10:4:26:546
+2: receiving "dest": 2, "src": 5, "data": null, "ts": 10, "msg_type": 1 at 10:4:26:547
+0: enter CS at 10:4:26:547
+3: reque CS at 10:4:26:547
+3: receiving "dest": 3, "src": 3, "data": null, "ts": 7, "msg_type": 0 at 10:4:26:547
+2: receiving "dest": 2, "src": 8, "data": null, "ts": 10, "msg_type": 1 at 10:4:26:547
+0: receiving "dest": 0, "src": 3, "data": null, "ts": 7, "msg_type": 0 at 10:4:26:548
+5: receiving "dest": 5, "src": 3, "data": null, "ts": 9, "msg_type": 0 at 10:4:26:548
+3: receiving "dest": 3, "src": 3, "data": null, "ts": 9, "msg_type": 3 at 10:4:26:548
+6: receiving "dest": 6, "src": 3, "data": null, "ts": 9, "msg_type": 0 at 10:4:26:548
+4: receiving "dest": 4, "src": 3, "data": null, "ts": 7, "msg_type": 0 at 10:4:26:548
+3: receiving "dest": 3, "src": 4, "data": null, "ts": 8, "msg_type": 3 at 10:4:26:549
+3: receiving "dest": 3, "src": 5, "data": null, "ts": 12, "msg_type": 3 at 10:4:26:549
+3: receiving "dest": 3, "src": 6, "data": null, "ts": 10, "msg_type": 3 at 10:4:26:549
+4: reque CS at 10:4:26:549
+1: receiving "dest": 1, "src": 4, "data": null, "ts": 10, "msg_type": 0 at 10:4:26:550
+3: receiving "dest": 3, "src": 4, "data": null, "ts": 10, "msg_type": 0 at 10:4:26:551
+4: receiving "dest": 4, "src": 4, "data": null, "ts": 10, "msg_type": 0 at 10:4:26:551
+5: receiving "dest": 5, "src": 4, "data": null, "ts": 10, "msg_type": 0 at 10:4:26:551
+7: receiving "dest": 7, "src": 4, "data": null, "ts": 10, "msg_type": 0 at 10:4:26:552
+4: receiving "dest": 4, "src": 1, "data": null, "ts": 16, "msg_type": 3 at 10:4:26:552
+4: receiving "dest": 4, "src": 3, "data": null, "ts": 15, "msg_type": 3 at 10:4:26:552
+5: reque CS at 10:4:26:552
+4: receiving "dest": 4, "src": 4, "data": null, "ts": 12, "msg_type": 3 at 10:4:26:552
+4: receiving "dest": 4, "src": 5, "data": null, "ts": 14, "msg_type": 3 at 10:4:26:552
+2: receiving "dest": 2, "src": 5, "data": null, "ts": 16, "msg_type": 0 at 10:4:26:553
+5: receiving "dest": 5, "src": 2, "data": null, "ts": 18, "msg_type": 3 at 10:4:26:554
+3: receiving "dest": 3, "src": 5, "data": null, "ts": 16, "msg_type": 0 at 10:4:26:554
+4: receiving "dest": 4, "src": 7, "data": null, "ts": 11, "msg_type": 3 at 10:4:26:554
+8: receiving "dest": 8, "src": 5, "data": null, "ts": 16, "msg_type": 0 at 10:4:26:555
+5: receiving "dest": 5, "src": 5, "data": null, "ts": 18, "msg_type": 0 at 10:4:26:555
+4: receiving "dest": 4, "src": 5, "data": null, "ts": 16, "msg_type": 0 at 10:4:26:555
+5: receiving "dest": 5, "src": 3, "data": null, "ts": 17, "msg_type": 3 at 10:4:26:555
+5: receiving "dest": 5, "src": 4, "data": null, "ts": 22, "msg_type": 3 at 10:4:26:556
+5: receiving "dest": 5, "src": 5, "data": null, "ts": 20, "msg_type": 3 at 10:4:26:556
+6: reque CS at 10:4:26:556
+5: receiving "dest": 5, "src": 8, "data": null, "ts": 17, "msg_type": 3 at 10:4:26:556
+0: receiving "dest": 0, "src": 6, "data": null, "ts": 12, "msg_type": 0 at 10:4:26:556
+8: receiving "dest": 8, "src": 6, "data": null, "ts": 12, "msg_type": 0 at 10:4:26:557
+6: receiving "dest": 6, "src": 6, "data": null, "ts": 12, "msg_type": 0 at 10:4:26:557
+3: receiving "dest": 3, "src": 6, "data": null, "ts": 12, "msg_type": 0 at 10:4:26:557
+6: receiving "dest": 6, "src": 3, "data": null, "ts": 19, "msg_type": 3 at 10:4:26:558
+6: receiving "dest": 6, "src": 6, "data": null, "ts": 14, "msg_type": 3 at 10:4:26:559
+6: receiving "dest": 6, "src": 8, "data": null, "ts": 19, "msg_type": 3 at 10:4:26:559
+7: receiving "dest": 7, "src": 6, "data": null, "ts": 12, "msg_type": 0 at 10:4:26:559
+6: receiving "dest": 6, "src": 7, "data": null, "ts": 13, "msg_type": 3 at 10:4:26:559
+7: reque CS at 10:4:26:560
+8: receiving "dest": 8, "src": 7, "data": null, "ts": 15, "msg_type": 0 at 10:4:26:560
+1: receiving "dest": 1, "src": 7, "data": null, "ts": 15, "msg_type": 0 at 10:4:26:561
+7: receiving "dest": 7, "src": 1, "data": null, "ts": 18, "msg_type": 3 at 10:4:26:562
+4: receiving "dest": 4, "src": 7, "data": null, "ts": 15, "msg_type": 0 at 10:4:26:562
+6: receiving "dest": 6, "src": 7, "data": null, "ts": 15, "msg_type": 0 at 10:4:26:562
+7: receiving "dest": 7, "src": 4, "data": null, "ts": 24, "msg_type": 3 at 10:4:26:562
+7: receiving "dest": 7, "src": 7, "data": null, "ts": 15, "msg_type": 0 at 10:4:26:562
+7: receiving "dest": 7, "src": 8, "data": null, "ts": 21, "msg_type": 3 at 10:4:26:563
+8: reque CS at 10:4:26:563
+7: receiving "dest": 7, "src": 6, "data": null, "ts": 24, "msg_type": 3 at 10:4:26:563
+7: receiving "dest": 7, "src": 7, "data": null, "ts": 26, "msg_type": 3 at 10:4:26:564
+8: receiving "dest": 8, "src": 8, "data": null, "ts": 23, "msg_type": 0 at 10:4:26:564
+2: receiving "dest": 2, "src": 8, "data": null, "ts": 23, "msg_type": 0 at 10:4:26:565
+7: receiving "dest": 7, "src": 8, "data": null, "ts": 25, "msg_type": 0 at 10:4:26:565
+6: receiving "dest": 6, "src": 8, "data": null, "ts": 23, "msg_type": 0 at 10:4:26:565
+5: receiving "dest": 5, "src": 8, "data": null, "ts": 23, "msg_type": 0 at 10:4:26:565
+8: receiving "dest": 8, "src": 8, "data": null, "ts": 25, "msg_type": 3 at 10:4:26:565
+8: receiving "dest": 8, "src": 2, "data": null, "ts": 24, "msg_type": 3 at 10:4:26:566
+8: receiving "dest": 8, "src": 5, "data": null, "ts": 26, "msg_type": 3 at 10:4:26:566
+8: receiving "dest": 8, "src": 6, "data": null, "ts": 26, "msg_type": 3 at 10:4:26:567
+8: receiving "dest": 8, "src": 7, "data": null, "ts": 31, "msg_type": 3 at 10:4:26:567
+0: exite CS at 10:4:28:547
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 18, "msg_type": 2 at 10:4:28:548
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 18, "msg_type": 2 at 10:4:28:549
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 20, "msg_type": 2 at 10:4:28:549
+3: receiving "dest": 3, "src": 0, "data": null, "ts": 20, "msg_type": 2 at 10:4:28:550
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 20, "msg_type": 1 at 10:4:28:550
+6: receiving "dest": 6, "src": 0, "data": null, "ts": 20, "msg_type": 2 at 10:4:28:550
+3: receiving "dest": 3, "src": 3, "data": null, "ts": 21, "msg_type": 1 at 10:4:28:551
+3: receiving "dest": 3, "src": 6, "data": null, "ts": 28, "msg_type": 1 at 10:4:28:551
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 20, "msg_type": 1 at 10:4:28:551
+1: receiving "dest": 1, "src": 2, "data": null, "ts": 26, "msg_type": 1 at 10:4:28:551
+1: enter CS at 10:4:28:553
+1: exite CS at 10:4:30:553
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 29, "msg_type": 2 at 10:4:30:553
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 29, "msg_type": 2 at 10:4:30:554
+3: receiving "dest": 3, "src": 0, "data": null, "ts": 30, "msg_type": 1 at 10:4:30:554
+2: receiving "dest": 2, "src": 1, "data": null, "ts": 29, "msg_type": 2 at 10:4:30:555
+4: receiving "dest": 4, "src": 1, "data": null, "ts": 31, "msg_type": 2 at 10:4:30:555
+7: receiving "dest": 7, "src": 1, "data": null, "ts": 31, "msg_type": 2 at 10:4:30:555
+2: receiving "dest": 2, "src": 1, "data": null, "ts": 31, "msg_type": 1 at 10:4:30:555
+4: receiving "dest": 4, "src": 7, "data": null, "ts": 33, "msg_type": 1 at 10:4:30:556
+3: receiving "dest": 3, "src": 4, "data": null, "ts": 32, "msg_type": 1 at 10:4:30:556
+2: receiving "dest": 2, "src": 2, "data": null, "ts": 30, "msg_type": 1 at 10:4:30:556
+0: reque CS at 10:4:33:550
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 32, "msg_type": 0 at 10:4:33:551
+3: receiving "dest": 3, "src": 0, "data": null, "ts": 32, "msg_type": 0 at 10:4:33:551
+0: receiving "dest": 0, "src": 0, "data": null, "ts": 34, "msg_type": 3 at 10:4:33:551
+2: receiving "dest": 2, "src": 0, "data": null, "ts": 32, "msg_type": 0 at 10:4:33:552
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 32, "msg_type": 0 at 10:4:33:552
+6: receiving "dest": 6, "src": 0, "data": null, "ts": 35, "msg_type": 0 at 10:4:33:552
+0: receiving "dest": 0, "src": 3, "data": null, "ts": 34, "msg_type": 3 at 10:4:33:552
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 33, "msg_type": 3 at 10:4:33:553
+0: receiving "dest": 0, "src": 2, "data": null, "ts": 34, "msg_type": 3 at 10:4:33:553
+0: receiving "dest": 0, "src": 6, "data": null, "ts": 36, "msg_type": 3 at 10:4:33:553
+1: reque CS at 10:4:35:554
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 35, "msg_type": 0 at 10:4:35:555
+2: receiving "dest": 2, "src": 1, "data": null, "ts": 35, "msg_type": 0 at 10:4:35:556
+7: receiving "dest": 7, "src": 1, "data": null, "ts": 35, "msg_type": 0 at 10:4:35:556
+1: receiving "dest": 1, "src": 1, "data": null, "ts": 37, "msg_type": 3 at 10:4:35:556
+0: receiving "dest": 0, "src": 1, "data": null, "ts": 35, "msg_type": 0 at 10:4:35:556
+1: receiving "dest": 1, "src": 2, "data": null, "ts": 36, "msg_type": 3 at 10:4:35:557
+4: receiving "dest": 4, "src": 1, "data": null, "ts": 35, "msg_type": 0 at 10:4:35:557
+1: receiving "dest": 1, "src": 0, "data": null, "ts": 41, "msg_type": 3 at 10:4:35:557
+1: receiving "dest": 1, "src": 4, "data": null, "ts": 36, "msg_type": 3 at 10:4:35:558
+1: receiving "dest": 1, "src": 7, "data": null, "ts": 36, "msg_type": 3 at 10:4:35:558
+

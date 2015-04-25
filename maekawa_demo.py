@@ -4,9 +4,7 @@ import time
 from node import Node
 import config
 
-import stacktracer
-
-TOT_EXEC_TIME = 20
+TOT_EXEC_TIME = 100
 
 def main():
 	nodes = []
