@@ -23,7 +23,7 @@ class MSG_TYPE(IntEnum):
     def __json__(self):
         return self
 
-    def ToStr(self):
+    def to_str(self):
         if self == 0:
             return 'REQUEST'
         elif self == 1:

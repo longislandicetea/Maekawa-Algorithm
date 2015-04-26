@@ -8,4 +8,4 @@ kill `lsof -i:3006`
 kill `lsof -i:3007`
 kill `lsof -i:3008`
 
-python maekawa_demo.py
+python mutex.py -cs_int 5 -next_req 7 -tot_exec_time 15 -option 1

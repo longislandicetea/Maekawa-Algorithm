@@ -1,13 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import json
-from json import JSONEncoder
-from json import JSONDecoder
 
 from enum_type import MSG_TYPE
 
 
-class MessageEncoder(JSONEncoder):
+class MessageEncoder(json.JSONEncoder):
 
     def encode(self, obj):
         obj_dict = dict()
@@ -19,25 +18,26 @@ class MessageEncoder(JSONEncoder):
         return super(MessageEncoder, self).encode(obj_dict)
 
 
-class MessageDecoder(JSONDecoder):
+class MessageDecoder(json.JSONDecoder):
 
     def decode(self, json_string):
         parsed_dict = super(MessageDecoder, self).decode(json_string)
         return Message(MSG_TYPE(parsed_dict['msg_type']),
-                       parsed_dict['src'], parsed_dict['dest'],
-                       parsed_dict['ts'], parsed_dict['data'])
+                       parsed_dict['src'], 
+                       parsed_dict['dest'],
+                       parsed_dict['ts'],
+                       parsed_dict['data'])
 
 
 class Message(object):
 
-    def __init__(
-        self,
-        msg_type=None,
-        src=None,
-        dest=None,
-        ts=None,
-        data=None,
-        ):
+    def __init__(self,
+            msg_type=None,
+            src=None,
+            dest=None,
+            ts=None,
+            data=None,
+            ):
         self.msg_type = msg_type
         self.src = src
         self.dest = dest
@@ -45,8 +45,11 @@ class Message(object):
         self.data = data
 
     def __json__(self):
-        return dict(msg_type=self.msg_type, src=self.src,
-                    dest=self.dest, ts=self.ts, data=self.data)
+        return dict(msg_type=self.msg_type, 
+            src=self.src,
+            dest=self.dest, 
+            ts=self.ts, 
+            data=self.data)
 
     def __cmp__(self, other):
         if self.ts != other.ts:
@@ -54,24 +57,24 @@ class Message(object):
         else:
             return cmp(self.src, other.src)
 
-    def SetType(self, msg_type):
+    def set_type(self, msg_type):
         self.msg_type = msg_type
 
-    def SetSrc(self, src):
+    def set_src(self, src):
         self.src = src
 
-    def SetDest(self, dest):
+    def set_dest(self, dest):
         self.dest = dest
 
-    def SetTS(self, ts):
+    def set_ts(self, ts):
         self.ts = ts
 
-    def SetData(self, data):
+    def set_data(self, data):
         self.data = data
 
-    def ToJSON(self):
+    def to_json(self):
         return json.dumps(self, cls=MessageEncoder)
 
     @staticmethod
-    def ToMessage(json_str):
+    def to_message(json_str):
         return json.loads(json_str, cls=MessageDecoder)
