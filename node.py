@@ -53,8 +53,10 @@ class ServerThread(Thread):
         if self._node.OPTION == 1:
             sys.stdout.write('{time} {thread_id} {src} {msg_type}\n'.format(
                 time=utils.datetime_to_str(datetime.now()),
-                thread_id=self._node.node_id, src=msg.src,
-                msg_type=msg.msg_type.to_str()))
+                thread_id=self._node.node_id, 
+                src=msg.src,
+                msg_type=msg.msg_type.to_str(),
+                ))
 
         self._node.lamport_ts = max(self._node.lamport_ts + 1, msg.ts)
 
@@ -101,8 +103,9 @@ class ServerThread(Thread):
 
     def _grant_request(self, request_msg):
         grant_msg = Message(msg_type=MSG_TYPE.GRANT,
-            src=self._node.node_id,
-            dest=request_msg.src)
+                            src=self._node.node_id,
+                            dest=request_msg.src,
+                            )
         self._node.client.send_message(grant_msg, grant_msg.dest)
         self._node.has_voted = True
         self._node.voted_request = request_msg
@@ -245,7 +248,7 @@ class Node(object):
         voting_set = dict()
         mat_k = int(ceil(sqrt(config.NUM_NODE)))
         (row_id, col_id) = (int(self.node_id / mat_k), 
-            int(self.node_id % mat_k))
+                            int(self.node_id % mat_k))
         for i in xrange(mat_k):
             voting_set[mat_k * row_id + i] = None
             voting_set[col_id + mat_k * i] = None
@@ -270,7 +273,8 @@ class Node(object):
         sys.stdout.write('{time} {thread_id} {node_list}\n'.format(
             time=utils.datetime_to_str(ts),
             thread_id=self.node_id,
-            node_list=self.voting_set.keys()))
+            node_list=self.voting_set.keys(),
+            ))
         self.signal_enter_cs.clear()
 
     def exit_cs(self, ts):

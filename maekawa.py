@@ -7,13 +7,7 @@ from node import Node
 
 class MaekawaMutex(object):
 
-    def __init__(
-        self,
-        cs_int,
-        next_req,
-        option,
-        ):
-
+    def __init__(self, cs_int, next_req, option):
         Node.CS_INT = cs_int
         Node.NEXT_REQ = next_req
         Node.OPTION = option
@@ -23,18 +17,7 @@ class MaekawaMutex(object):
         for node in self._nodes:
             node.build_connection(config.NUM_NODE)
 
-            # print node.NodeID, node.CS_INT, node.NEXT_REQ
-
     def run(self):
-
-        # print "hello world!"
-
         self._build_connection()
-
-        # cnt = 0
-
         for node in self._nodes:
-
-            # sys.stdout.write("{id} {tid}\n".format(id=cnt, tid=))
-
             node.run()
