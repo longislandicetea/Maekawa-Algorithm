@@ -22,15 +22,19 @@ Outputs:
 	```bash
 	$> Time Node_ID Node_List
 	```
-	* Time
-	* Node_ID
-	* Node_List
-	
+	* `Time`: system time at which the node enters the critical section
+	* `Node_ID`: identifier of the node entering the critical section
+	* `Node_List`: set of node identifiers from whom this node has obtained permission to enter the critical section
+
 * Additionally, when `option` is specified as 1, each node should also print to the screen a log whenever it receives a message from another node:
 	
 	```bash
 	$> Time Node_ID Sender_ID Message_Type
 	```
+	* `Time`: systime time at which the log is printed
+	* `Node_ID`: identifier of the node printing the log
+	* `Sender_ID`: identifier of the node that sent the message
+	* `Message_Type`: type of the received message
 
 Files
 -----
