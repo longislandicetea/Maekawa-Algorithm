@@ -23,6 +23,7 @@ from threading import Event, Thread, Timer
 
 import config
 from enum_type import MSG_TYPE, STATE
+import logging
 from message import Message
 import utils
 
@@ -75,13 +76,9 @@ class ServerThread(Thread):
 
         """
         if self._node.OPTION == 1:
-            sys.stdout.write('{time} {thread_id} {src} {msg_type}\n'.format(
-                time=utils.datetime_to_str(datetime.now()),
-                thread_id=self._node.node_id, 
-                src=msg.src,
-                msg_type=msg.msg_type.to_str(),
-                ))
-
+            logging.log_receive_message(msg)
+        #logging.log_receive_message_debug(msg, self._node.lamport_ts)
+        
         self._node.lamport_ts = max(self._node.lamport_ts + 1, msg.ts)
 
         if msg.msg_type == MSG_TYPE.REQUEST:
@@ -93,7 +90,7 @@ class ServerThread(Thread):
         elif msg.msg_type == MSG_TYPE.FAIL:
             self._on_fail(msg)
         elif msg.msg_type == MSG_TYPE.INQUIRE:
-            self._onInquire(msg)
+            self._on_inquire(msg)
         elif msg.msg_type == MSG_TYPE.YIELD:
             self._on_yield(msg)
 
@@ -125,8 +122,7 @@ class ServerThread(Thread):
                 else:
                     response_msg.set_type(MSG_TYPE.FAIL)
                     response_msg.set_dest(request_msg.src)
-                self._node.client.send_message(response_msg,
-                        response_msg.dest)
+                self._node.client.send_message(response_msg, response_msg.dest)
             else:
                 self._grant_request(request_msg)
 
@@ -156,7 +152,6 @@ class ServerThread(Thread):
             request_msg (Message): REQUEST type message object
 
         """
-
         grant_msg = Message(msg_type=MSG_TYPE.GRANT,
                             src=self._node.node_id,
                             dest=request_msg.src,
@@ -451,11 +446,7 @@ class Node(object):
         self.time_exit_cs = ts + timedelta(milliseconds=Node.CS_INT)
         self.state = STATE.HELD
         self.lamport_ts += 1
-        sys.stdout.write('{time} {thread_id} {node_list}\n'.format(
-            time=utils.datetime_to_str(ts),
-            thread_id=self.node_id,
-            node_list=self.voting_set.keys(),
-            ))
+        logging.log_enter_cs(ts, self.node_id, self.voting_set.keys())
         self.signal_enter_cs.clear()
 
     def exit_cs(self, ts):
