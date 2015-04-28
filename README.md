@@ -18,14 +18,16 @@ Arguments:
 
 Outputs:
 * Each node prints to the screen the following log whenever it enters the critical section (regardless of the `option` value):
+	
 	```bash
 	Time Node_ID Node_List
 	```
 * Additionally, when `option` is specified as 1, each node should also print to the screen a log whenever it receives a message from another node:
+	
 	```bash
 	Time Node_ID Sender_ID Message_Type
 	```
-	
+
 Files
 -----
 * mutex.py: main program entrance
