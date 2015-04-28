@@ -9,8 +9,9 @@ Usage
 ```bash
 $> python mutex.py -cs_int 5 -next_req 7 -tot_exec_time 15 -option 1
 ```
-Arguments:
 
+Arguments
+----------
 	* -cs_int (required): time a node spends in the critical section
 	* -next_req (required): time a node waits after exiting the critical section before it requests another critical section entrance
 	* -tot_exec_time (required): total execution time for a node
