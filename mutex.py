@@ -11,7 +11,8 @@ from maekawa import MaekawaMutex
 
 def create_arg_parser():
     parser = ArgumentParser(
-        description='A distributed mutual exclusion program implemented with Maekawa algorithm',
+        description='A distributed mutual exclusion program '
+        'implemented with Maekawa algorithm',
         )
     parser.add_argument(
         '-cs_int',
@@ -26,7 +27,8 @@ def create_arg_parser():
         '-next_req',
         action='store',
         dest='next_req',
-        help='time a node waits after exiting the critical section before it requests another critical section entrance',
+        help='time a node waits after exiting the critical section '
+        'before it requests another critical section entrance',
         type=int,
         default=7,
         required=False,

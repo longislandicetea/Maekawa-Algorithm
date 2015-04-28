@@ -1,5 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
+"""This module implements basic functionalities of a node including
+communicating with other nodes via message passing, competing for 
+critical section.
+
+classes:
+    ServerThread: implements receiving and processing message as server.
+    ClientThread: implements sending message as client.
+    DelayThread: implements message passing delay. (only for debug use)
+    Node: encapsulates all functionalities of a node.
+
+"""
 from copy import deepcopy
 from datetime import datetime, timedelta
 import heapq
@@ -16,7 +28,12 @@ import utils
 
 
 class ServerThread(Thread):
+    """Server thread in charge of receiving and processing message.
 
+    Attributes:
+        _node (reference): reference to the owner node
+
+    """
     def __init__(self, node):
         Thread.__init__(self)
         self._node = node
@@ -25,6 +42,7 @@ class ServerThread(Thread):
         self._update()
 
     def _update(self):
+        """Receive messages with non-blocking socket."""
         self._connection_list = []
         self._server_socket = utils.create_server_socket(
             config.NODE_PORT[self._node.node_id])
@@ -50,6 +68,12 @@ class ServerThread(Thread):
         self._server_socket.close()
 
     def _process_message(self, msg):
+        """Process message received from the socket.
+
+        Args:
+            msg (Message): message received by server socket
+
+        """
         if self._node.OPTION == 1:
             sys.stdout.write('{time} {thread_id} {src} {msg_type}\n'.format(
                 time=utils.datetime_to_str(datetime.now()),
@@ -74,6 +98,20 @@ class ServerThread(Thread):
             self._on_yield(msg)
 
     def _on_request(self, request_msg):
+        """Handle REQUEST type message
+
+        a. Cache the request if the node is in the critical section currently.
+        b. Otherwise, check if the node has voted for a request or not.
+                i. If it has, either send an INQUIRE message to the previous 
+                   voted requesting node or send a FAIL message to the current 
+                   requesting node. (depending on the timestamp and node id order 
+                   of the requests)
+                ii. Otherwise, vote for current request directly.
+
+        Args:
+            request_msg (Message): REQUEST type message object
+
+        """
         if self._node.state == STATE.HELD:
             heapq.heappush(self._node.request_queue, request_msg)
         else:
@@ -93,6 +131,16 @@ class ServerThread(Thread):
                 self._grant_request(request_msg)
 
     def _on_release(self, release_msg=None):
+        """Handle RELEASE type message
+
+        a. If request priority queue is not empty, pop out the request with
+           the highest priority and handle that request.
+        b. Otherwise, reset corresponding flags.
+
+        Args:
+            release_msg (Message): RELEASE type message object
+
+        """
         self._node.has_inquired = False
         if self._node.request_queue:
             next_request = heapq.heappop(self._node.request_queue)
@@ -102,6 +150,13 @@ class ServerThread(Thread):
             self._node.voted_request = None
 
     def _grant_request(self, request_msg):
+        """Vote for a request
+
+        Args:
+            request_msg (Message): REQUEST type message object
+
+        """
+
         grant_msg = Message(msg_type=MSG_TYPE.GRANT,
                             src=self._node.node_id,
                             dest=request_msg.src,
@@ -111,14 +166,38 @@ class ServerThread(Thread):
         self._node.voted_request = request_msg
 
     def _on_grant(self, grant_msg):
+        """Handle GRANT type message
+
+        Increase the counter of received votes.
+
+        Args:
+            grant_msg (Message): GRANT type message object
+            
+        """
         # self._node.voting_set[grant_msg.src] = grant_msg
         self._node.num_votes_received += 1
 
     def _on_fail(self, fail_msg):
+        """Handle FAIL type message
+
+        Args:
+            fail_msg (Message): FAIL type message object
+            
+        """
         # self._node.voting_set[fail_msg.src] = fail_msg
         pass
 
     def _on_inquire(self, inquire_msg):
+        """Handle INQUIRE type message
+
+        If current node is not in the critical section, send a 
+        YIELD message to the inquiring node, indicating it
+        would like the inquiring node to revoke the vote.
+
+        Args:
+            inquire_msg (Message): INQUIRE type message object
+            
+        """
         if self._node.state != STATE.HELD:
             # self._node.voting_set[inquire_msg.src] = None
             self._node.num_votes_received -= 1
@@ -128,13 +207,29 @@ class ServerThread(Thread):
             self._node.client.send_message(yield_msg, yield_msg.dest)
 
     def _on_yield(self, yield_msg):
+        """Handle YIELD type message
+
+        Put the latest voted request back to request queue.
+        Then behaves just like receiving a RELEASE message.
+
+        Args:
+            yield_msg (Message): YIELD type message object
+            
+        """
         heapq.heappush(self._node.request_queue,
                        self._node.voted_request)
         self._on_release()
 
 
 class ClientThread(Thread):
+    """Client thread in charge of sending requests.
 
+    Attributes:
+        _node (reference): reference to the owner node
+        _client_sockets (socket list): a list of sockets
+                used as communication channels among nodes.
+
+    """
     def __init__(self, node):
         Thread.__init__(self)
         self._node = node
@@ -145,6 +240,18 @@ class ClientThread(Thread):
         self._update()
 
     def _update(self):
+        """Run Request-Enter-Exit circle
+
+        Request: requests for entering the critical section either at the 
+                 beginning or NEXT_REQ seconds after exiting the critical section.
+
+        Enter: enters into the critical section when it receives enough 
+               votes from the its voting set.
+
+        Exit: exits the critical section after CS_INT seconds after entering
+              the critical section.
+        
+        """
         while True:
             self._node.signal_request_cs.wait()
             self._node.request_cs(datetime.now())
@@ -154,14 +261,30 @@ class ClientThread(Thread):
             self._node.exit_cs(datetime.now())
 
     def send_message(self, msg, dest, multicast=False):
+        """Send message to another node
+
+        Args:
+            msg (Message): message object to be sent
+            dest (int): node id of the destination node
+            multicast (boolean): indicates whether the message is sent by
+                                 unicast or multicast.
+
+        """
         if not multicast:
             self._node.lamport_ts += 1
             msg.set_ts(self._node.lamport_ts)
-        self._client_sockets[dest].sendall(msg.to_json())
         assert dest == msg.dest
+        self._client_sockets[dest].sendall(msg.to_json())
         #self._node.MessageBuffer[dest].append([msg, datetime.now() + timedelta(0, config.DELAY[self._node.node_id][dest])])
 
     def multicast(self, msg, group):
+        """Multicast message to a group
+
+        Args:
+            msg (Message): message object to be multicasted
+            group: a list of destination node ids 
+
+        """
         self._node.lamport_ts += 1
         msg.set_ts(self._node.lamport_ts)
         for dest in group:
@@ -178,6 +301,14 @@ class ClientThread(Thread):
 
 
 class DelayThread(Thread):
+    """Delay thread used for simulating channel delay.
+
+    This thread is optional, only used for debugging.
+
+    Attributes:
+        _node (reference): reference to the owner node
+
+    """
 
     def __init__(self, node):
         Thread.__init__(self)
@@ -202,7 +333,43 @@ class DelayThread(Thread):
 
 
 class Node(object):
+    """Class that implements a node (simulating a thread which competes for 
+       entering the critical section during mutual exclusion process.
 
+    Static attributes:
+        CS_INT (int): time a node spends in the critical section
+        NEXT_REQ (int): time a node waits after exiting the critical section 
+                        before it requests another critical section entrance
+        OPTION (boolean): display message log on screen or not
+
+    Instance attributes:
+        node_id (int): a unique id used for identifying the node 
+        state (STATE): the current state of the node regarded to critical section
+                       (INIT/REQUEST/HELD/RELEASE)
+        lamport_ts (int): Lamport timestamp used for ensuring total ordering of
+                          request, important to resolve deadlock issue. 
+
+        has_voted (boolean): has the node voted for a request or not
+        voted_request (Message): the latest request the node voted for
+        request_queue (priority queue): cache the requests that have not been 
+                                        handled by the node
+
+        voting_set (dictionary): a list of nodes that the node needs to get votes
+                                 from in order to enter the critical section.
+        num_votes_received (int): the number of votes the node has received
+        has_inquired (boolean): whether the node has inquired other nodes or not
+
+        server (Thread): thread simulating server functionality
+        client (Thread): thread simulating client functionality
+
+        signal_request_cs (Event): signal indicating the node could request
+        signal_enter_cs (Event): signal indicating the node could enter
+        signal_exit_cs (Event): signal indicating the node could exit
+
+        time_request_cs (datetime): timestamp that the node sends the request
+        time_exit_cs (datetime): timestamp that the node enters the critical section
+
+    """
     CS_INT = None
     NEXT_REQ = None
     OPTION = None
@@ -259,6 +426,13 @@ class Node(object):
             self.voting_set[voter] = None
 
     def request_cs(self, ts):
+        """Node requests to enter critical section.
+
+        Set state to REQEUST.
+        Increase lamport timestamp by 1.
+        Multicast the request to its voting set.
+
+        """
         self.state = STATE.REQUEST
         self.lamport_ts += 1
         request_msg = Message(msg_type=MSG_TYPE.REQUEST,
@@ -267,6 +441,13 @@ class Node(object):
         self.signal_request_cs.clear()
 
     def enter_cs(self, ts):
+        """Node enters the critical section.
+
+        Set state to HELD.
+        Increase lamport timestamp by 1.
+        Calculate the timestamp that it should exit.
+
+        """
         self.time_exit_cs = ts + timedelta(milliseconds=Node.CS_INT)
         self.state = STATE.HELD
         self.lamport_ts += 1
@@ -278,12 +459,18 @@ class Node(object):
         self.signal_enter_cs.clear()
 
     def exit_cs(self, ts):
+        """Node exits the critical section.
+
+        Set state to RELEASE.
+        Increase lamport timestamp by 1 and reset corresponding variables.
+        Multicast the release message to its voting set.
+
+        """
         self.time_request_cs = ts + timedelta(milliseconds=Node.NEXT_REQ)
         self.state = STATE.RELEASE
         self.lamport_ts += 1
         self.num_votes_received = 0
         # self._reset_voting_set()
-
         release_msg = Message(msg_type=MSG_TYPE.RELEASE,
                               src=self.node_id)
         self.client.multicast(release_msg, self.voting_set.keys())
@@ -293,6 +480,12 @@ class Node(object):
         self.client.build_connection(num_node)
 
     def _check(self):
+        """Run state machine.
+
+        Check and change the node state periodically with 1 millisecond
+        time granularity.
+    
+        """
         timer = Timer(0.001, self._check)
         timer.start()
         curr_time = datetime.now()

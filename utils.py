@@ -1,9 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""This module contains some utility functions."""
 import socket
 
 def datetime_to_str(time):
+    """convert python datetime object to a 
+    {hour}:{min}:{second}:{millisecond} string format
+
+    """
     return '{hour}:{min}:{second}:{millisecond}'.format(
         hour=time.hour,
         min=time.minute, 

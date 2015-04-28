@@ -8,4 +8,4 @@ kill `lsof -i:3006`
 kill `lsof -i:3007`
 kill `lsof -i:3008`
 
-python mutex.py -cs_int 5 -next_req 7 -tot_exec_time 15 -option 1
+python mutex.py -cs_int 5 -next_req 7 -tot_exec_time 10 -option 1

@@ -6,7 +6,7 @@ from node import Node
 
 
 class MaekawaMutex(object):
-
+    """Class that implements and runs Maekawa mutual exclusion algorithm"""
     def __init__(self, cs_int, next_req, option):
         Node.CS_INT = cs_int
         Node.NEXT_REQ = next_req

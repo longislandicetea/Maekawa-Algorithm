@@ -1,13 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""This module implements message passing functionality.
+
+classes:
+    MessageEncoder: encode a Message object to json
+    MessageDecoder: decode a Message object from json_string
+    Message: media of nodes communication
+
+"""
 import json
 
 from enum_type import MSG_TYPE
 
 
 class MessageEncoder(json.JSONEncoder):
-
     def encode(self, obj):
         obj_dict = dict()
         obj_dict['msg_type'] = int(obj.msg_type)
@@ -19,7 +26,6 @@ class MessageEncoder(json.JSONEncoder):
 
 
 class MessageDecoder(json.JSONDecoder):
-
     def decode(self, json_string):
         parsed_dict = super(MessageDecoder, self).decode(json_string)
         return Message(MSG_TYPE(parsed_dict['msg_type']),
@@ -30,7 +36,16 @@ class MessageDecoder(json.JSONDecoder):
 
 
 class Message(object):
+    """Class that implements the media of nodes communication.
 
+    Attributes:
+        msg_type (MSG_TYPE): type of message
+        src (int): source of message
+        dest (int): destination of message
+        ts (int): Lamport timestamp of message
+        data (str): other information of message
+
+    """
     def __init__(self,
             msg_type=None,
             src=None,
