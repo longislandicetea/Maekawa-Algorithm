@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Author: Hao Luo
+
 import config
 from node import Node
 

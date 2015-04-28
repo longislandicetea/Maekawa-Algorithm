@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Author: Hao Luo
+
 """This module contains some utility functions."""
 import socket
 

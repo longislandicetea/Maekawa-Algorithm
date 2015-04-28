@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from enum import IntEnum
 
+# Author: Hao Luo
 
 class STATE(IntEnum):
     """Enum class that represents node state"""

@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Author: Hao Luo
+
 from datetime import datetime
 import sys
 
@@ -32,4 +34,3 @@ def log_receive_message_debug(msg, ts):
         msg_ts=msg.ts,
         self_ts=ts,
         ))
-	

@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Author: Hao Luo
+
 """This module implements basic functionalities of a node including
 communicating with other nodes via message passing, competing for 
 critical section.

@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Author: Hao Luo
+
 from argparse import ArgumentParser
 import sys
 from threading import Thread
