@@ -16,6 +16,12 @@ Arguments:
 * tot_exec_time (required): total execution time (seconds) for a node
 * option (optional): 1 means display message log on screen
 
+Outputs:
+* Each node prints to the screen the following log whenever it enters the critical section (regardless of the `option` value):
+	Time Node_ID Node_List	
+*Additionally, when `option` is specified as 1, each node should also print to the screen a log whenever it receives a message from another node:
+	Time Node_ID Sender_ID Message_Type 
+
 Files
 -----
 * mutex.py: main program entrance
