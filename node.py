@@ -121,6 +121,7 @@ class ServerThread(Thread):
                         not self._node.has_inquired):
                     response_msg.set_type(MSG_TYPE.INQUIRE)
                     response_msg.set_dest(self._node.voted_request.src)
+                    self._node.has_inquired = True
                 else:
                     response_msg.set_type(MSG_TYPE.FAIL)
                     response_msg.set_dest(request_msg.src)
